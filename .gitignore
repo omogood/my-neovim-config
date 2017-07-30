@@ -1,0 +1,9 @@
+autoload/
+colors/
+dein.vim/
+dein/
+plugged/
+.netrwhist
+_init.vim
+.init.vim.un~
+init.vim~
