@@ -134,6 +134,11 @@ set termguicolors
 " Font の設定
 set guifont=SourceCodePro-Medium:h15
 
+" vim-airline のオプション
+let g:airline#extensions#tabline#enabled = 1
+" vim-airline のテーマを設定
+let g:airline_theme='luna'
+
 set runtimepath+=~/.config/nvim/dein.vim/repos/github.com/Shougo/dein.vim
 runtime! userautoload/*.vim
 
@@ -160,6 +165,12 @@ Plug 'thinca/vim-ref'
 Plug 'awetzel/elixir.nvim', { 'do': 'yes \| ./install.sh' }
 " Riot.js
 Plug 'ryym/vim-riot'
+" Python
+Plug 'zchee/deoplete-jedi'
+
+" vim-airline ステータスバーなどの見た目系
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 call plug#end()
 
 " deoplete を使用する
