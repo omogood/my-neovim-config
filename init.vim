@@ -89,13 +89,6 @@ inoremap <C-n> <C-x><C-o>
 
 " keymap の再設定
 let mapleader = "\<Space>"
-nnoremap <silent> <Leader>tt :tabnew<CR>
-nnoremap <silent> <Leader>w :w<CR>
-nnoremap <silent> <Leader>q :q<CR>
-" 保存と間違えてこっちを起動してしまうことがあるから一旦割り当てを解除しておく
-"nnoremap <silent> <Leader>e :e.<CR>
-nnoremap <silent> <Leader>ss :split<CR>
-nnoremap <silent> <Leader>vs :vsplit<CR>
 
 " ノーマルモードで; と : を入れ替える
 nnoremap ; :
@@ -171,6 +164,10 @@ Plug 'zchee/deoplete-jedi'
 " vim-airline ステータスバーなどの見た目系
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+
+" NyaoVim
+Plug 'rhysd/nyaovim-popup-tooltip'
+Plug 'rhysd/nyaovim-markdown-preview'
 call plug#end()
 
 " deoplete を使用する
@@ -191,4 +188,5 @@ let g:rustfmt_command = '$HOME/.cargo/bin/rustfmt'
 set hidden
 let g:racer_command = '$HOME/.cargo/bin/racer'
 
-
+" NyaoVim
+let g:markdown_preview_auto = 1
