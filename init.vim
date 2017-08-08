@@ -67,7 +67,7 @@ set nobackup
 " terminal emulator を zsh に変更
 set sh=zsh
 
-" terminal emulator でコマンドモードに移行するキーマップ
+" terminal emulator でノーマルモードに移行するキーマップ
 tnoremap <silent> <ESC> <C-\><C-n>
 
 
