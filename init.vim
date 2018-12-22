@@ -115,15 +115,17 @@ let g:python3_host_prog = $PYENV_ROOT . '/shims/python3'
 " オムニ変換を再割り当て
 inoremap <C-n> <C-x><C-o>
 
-" ノーマルモードで; と : を入れ替える
+" ; と : を入れ替える
 nnoremap ; :
 nnoremap : ;
+vnoremap ; :
+vnoremap : ;
 
 " ESC の代替え
 inoremap <silent><C-j><C-j> <esc>:w<CR>
 
 " ハイライトの非表示
-nnoremap <silent><ESC> :noh<CR>
+nnoremap <silent><ESC><ESC> :noh<CR>
 
 " タブ移動
 nnoremap <Leader>j gt
@@ -167,23 +169,18 @@ endfunction
 autocmd QuickfixCmdPost vimgrep call OpenModifiableQF()
 autocmd QuickfixCmdPost grep call OpenModifiableQF()
 
+" Quickfix リスト: 次に移動
+nnoremap <silent><A-n> :cn<CR>
+" Quickfix リスト: 前に移動
+nnoremap <silent><A-N> :cN<CR>
 
-" vimgrep 後にクイックフィックスリストが表示される
-"autocmd QuickfixCmdPost vimgrep copen
-" VimGrep の Re-Map
-augroup fileTypeSettings
-    autocmd!
-    autocmd BufNewFile,BufRead *.py nnoremap <leader><C-l> :lvim /<C-r>*/j ./**/*.py \|lw
-    autocmd BufNewFile,BufRead *.py nnoremap <C-l> :lvim /<C-r><C-w>/j ./**/*.py \|lw
-    autocmd BufNewFile,BufRead *.rs nnoremap <leader><C-l> :lvim /<C-r>*/j ./**/*.rs \|lw
-    autocmd BufNewFile,BufRead *.rs nnoremap <C-l> :lvim /<C-r><C-w>/j ./**/*.rs \|lw
-    autocmd BufNewFile,BufRead *.ex nnoremap <leader><C-l> :lvim /<C-r>*/j ./**/*.ex \|lw
-    autocmd BufNewFile,BufRead *.ex nnoremap <C-l> :lvim /<C-r><C-w>/j ./**/*.ex \|lw
-    autocmd BufNewFile,BufRead *.exs nnoremap <leader><C-l> :lvim /<C-r>*/j ./**/*.exs \|lw
-    autocmd BufNewFile,BufRead *.exs nnoremap <C-l> :lvim /<C-r><C-w>/j ./**/*.exs \|lw
-    autocmd BufNewFile,BufRead *.go nnoremap <leader><C-l> :lvim /<C-r>*/j ./**/*.go \|lw
-    autocmd BufNewFile,BufRead *.go nnoremap <C-l> :lvim /<C-r><C-w>/j ./**/*.go \|lw
-augroup END
+" augroup fileTypeSettings
+"     autocmd!
+"     autocmd BufRead, BufNewFile *.py nnoremap <silent><A-/> <S-i>#<ESC>:w<CR>
+"     autocmd BufRead, BufNewFile *.rs nnoremap <silent><A-/> <S-i>//<ESC>:w<CR>
+"     autocmd BufRead, BufNewFile *.go nnoremap <silent><A-/> <S-i>//<ESC>:w<CR>
+" augroup END
+
 nnoremap <A-l> :lvim /\<<C-r><C-w>\>/j % \|lw
 
 " 外部 grep の設定
@@ -191,6 +188,7 @@ set grepprg=grep\ -rnIH\ --exclude-dir=.svn\ --exclude-dir=.git
 " grep 後にクイックフィックスリストが表示される
 "autocmd QuickfixCmdPost grep copen
 nnoremap <expr> <leader>g ':grep! ' . expand('<cword>') . ' *'
+nnoremap <leader>G :grep! <C-r>* *
 
 nnoremap <silent><leader>f /\V\<<C-r>*\><CR>
 nnoremap <silent><leader>F /\V<C-r>*<CR>
@@ -267,9 +265,9 @@ Plug 'elmcast/elm-vim'
 Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 
 " Elixir
-"Plug 'elixir-lang/vim-elixir'
-"Plug 'thinca/vim-ref'
-"Plug 'awetzel/elixir.nvim', { 'do': 'yes \| ./install.sh' }
+Plug 'elixir-lang/vim-elixir'
+Plug 'thinca/vim-ref'
+Plug 'awetzel/elixir.nvim', { 'do': 'yes \| ./install.sh' }
 " Python
 Plug 'zchee/deoplete-jedi'
 
@@ -342,6 +340,10 @@ augroup Init
     "autocmd BufRead,bufNewFile *.ex setfiletype elixir
     autocmd FileType elixir setlocal sw=2 sts=2 ts=2 et
     autocmd FileType haskell setlocal sw=2 sts=2 ts=2 et
+
+    "autocmd python nnoremap <silent><A-/> <S-i>#<ESC>:w<CR>
+    "autocmd rust nnoremap <silent><A-/> <S-i>//<ESC>:w<CR>
+    "autocmd go nnoremap <silent><A-/> <S-i>//<ESC>:w<CR>
 
 augroup END
 "endif
