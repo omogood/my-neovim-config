@@ -57,8 +57,8 @@ set listchars=tab:>-,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
 augroup highlightIdegraphicSpace
   autocmd!
   " スペース、タブの色をグレーに変更
-  autocmd Colorscheme * highlight NonText guifg=DarkGray
-  autocmd VimEnter,Colorscheme * highlight IdeographicSpace term=underline ctermbg=DarkGreen guibg=DarkGray
+  autocmd Colorscheme * highlight NonText guifg=#444b71
+  autocmd VimEnter,Colorscheme * highlight IdeographicSpace term=underline ctermbg=DarkGreen guibg=#444b71
   autocmd VimEnter,WinEnter * match IdeographicSpace /　/
 augroup END
 " Font の設定
@@ -201,6 +201,10 @@ nnoremap <C-y> viwy
 nnoremap <C-p> viwp
 " Insert モード中にペースト
 inoremap <C-v> <C-r>*
+" Ex モード中にペースト
+vnoremap <C-v> <C-r>*
+" Terminal モード中にペースト
+tnoremap <C-v> <C-r>*
 
 " ファイルの保存
 nnoremap <leader>w :w<CR>
@@ -286,6 +290,10 @@ Plug 'cespare/vim-toml'
 
 " Color Scheme
 Plug 'rakr/vim-one'
+Plug 'cocopon/iceberg.vim'
+
+" Emmet
+Plug 'mattn/emmet-vim'
 call plug#end()
 
 
@@ -297,7 +305,8 @@ let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline_theme='one'
 
 " Color Scheme の設定
-colorscheme one
+"colorscheme one
+colorscheme iceberg
 set background=dark
 
 filetype plugin indent on
