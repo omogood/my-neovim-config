@@ -61,12 +61,9 @@ augroup highlightIdegraphicSpace
   autocmd VimEnter,Colorscheme * highlight IdeographicSpace term=underline ctermbg=DarkGreen guibg=#444b71
   autocmd VimEnter,WinEnter * match IdeographicSpace /　/
 augroup END
+
 " Font の設定
-"set guifont=SourceCodePro-Medium:h15
-"set guifont=RictyDiminished-Regular:h15
-"set guifont=Monoisome-Regular:h15
-"set guifont=FiraCode-Retina:h15
-set guifont=Hack-Regular:h16
+set guifont=hack:h18
 
 " 改行時などに、自動でインデントを設定してくれる
 set smartindent
@@ -81,13 +78,11 @@ set wildmenu
 set laststatus=2
 
 " クリップボードの共有
-set clipboard=unnamed
+set clipboard=unnamedplus
 
 " バックアップファイルを作成しない
 set nobackup
 
-" terminal emulator を zsh に変更
-"set sh=zsh
 " terminal emulator を fish に変更
 set sh=fish
 
@@ -106,10 +101,8 @@ tnoremap <silent> <C-j><C-j> <C-\><C-n>
 let mapleader = "\<Space>"
 
 " pyenv でPython3 を入れてるからこの設定を行う。
-"let g:python_host_prog = $PYENV_ROOT . '/shims/python'
-let g:python_host_prog = $PYENV_ROOT . '/versions/2.7.10/bin/python'
-let g:python3_host_prog = $PYENV_ROOT . '/shims/python3'
-"let g:python3_host_prog = $PYENV_ROOT . '/versions/3.6.5/bin/python'
+let g:python_host_prog = $PYENV_ROOT . '/shims/python'
+let g:python3_host_prog = $PYENV_ROOT . '/shims/python'
 
 " インサートモードのキーマップ設定
 " オムニ変換を再割り当て
@@ -130,11 +123,6 @@ nnoremap <silent><ESC><ESC> :noh<CR>
 " タブ移動
 nnoremap <Leader>j gt
 nnoremap <Leader>k gT
-
-" 現在の行を上に動かす
-"nnoremap <S-Up>  :<c-u>execute 'move -1-'. v:count1<cr>
-" 現在の行を下に動かす
-"nnoremap <S-Down>  :<c-u>execute 'move +'. v:count1<cr>
 
 " ウィンドウのサイズを変更する
 nnoremap <S-Up> <C-w>+
@@ -174,19 +162,11 @@ nnoremap <silent><A-n> :cn<CR>
 " Quickfix リスト: 前に移動
 nnoremap <silent><A-N> :cN<CR>
 
-" augroup fileTypeSettings
-"     autocmd!
-"     autocmd BufRead, BufNewFile *.py nnoremap <silent><A-/> <S-i>#<ESC>:w<CR>
-"     autocmd BufRead, BufNewFile *.rs nnoremap <silent><A-/> <S-i>//<ESC>:w<CR>
-"     autocmd BufRead, BufNewFile *.go nnoremap <silent><A-/> <S-i>//<ESC>:w<CR>
-" augroup END
-
 nnoremap <A-l> :lvim /\<<C-r><C-w>\>/j % \|lw
 
 " 外部 grep の設定
 set grepprg=grep\ -rnIH\ --exclude-dir=.svn\ --exclude-dir=.git
 " grep 後にクイックフィックスリストが表示される
-"autocmd QuickfixCmdPost grep copen
 nnoremap <expr> <leader>g ':grep! ' . expand('<cword>') . ' *'
 nnoremap <leader>G :grep! <C-r>* *
 
@@ -195,16 +175,12 @@ nnoremap <silent><leader>F /\V<C-r>*<CR>
 
 " 単語選択
 nnoremap <silent><leader><leader> viw
-" yank
-nnoremap <C-y> viwy
-" paste
-nnoremap <C-p> viwp
 " Insert モード中にペースト
-inoremap <C-v> <C-r>*
+inoremap <C-v> <C-r>"
 " Ex モード中にペースト
-vnoremap <C-v> <C-r>*
+vnoremap <C-v> <C-r>"
 " Terminal モード中にペースト
-tnoremap <C-v> <C-r>*
+tnoremap <C-v> <C-r>"
 
 " ファイルの保存
 nnoremap <leader>w :w<CR>
@@ -238,26 +214,29 @@ set t_Co=256
 set termguicolors
 
 
-"set runtimepath+=~/.config/nvim/dein.vim/repos/github.com/Shougo/dein.vim
-" 自作のプラグインを読み込ませる
-"set runtimepath+=~/.config/nvim/my-plugin/neofinder/neofinder.vim
-"runtime! userautoload/*.vim
-
 if &compatible
 	set nocompatible
 endif
 
-" --- vim-plug を使ったパッケージ管理
+" ****************************************
+"     vim-plug を使ったパッケージ管理
+" ****************************************
 call plug#begin('~/.config/nvim/plugged')
+
+" vim-lsp 関連
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
+" vim-lsp で自動補完を有効にするため
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+
 " deoplete
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 let g:deoplete#enable_at_startup = 1
+
+" fzf
+Plug '/home/linuxbrew/.linuxbrew/opt/fzf'
+Plug 'junegunn/fzf.vim'
 
 " Golang
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
@@ -265,15 +244,19 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 " elm 言語
 Plug 'elmcast/elm-vim'
 
-" Rust 言語
-Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+" ALE
+Plug 'w0rp/ale'
+" ALE - Elixir
+let g:ale_elixir_elixir_ls_release = '$HOME/elixir-ls/rel'
+let g:ale_linters = {
+\   'elixir': ['elixir-ls'],
+\}
 
-" Elixir
-Plug 'elixir-lang/vim-elixir'
-Plug 'thinca/vim-ref'
-Plug 'awetzel/elixir.nvim', { 'do': 'yes \| ./install.sh' }
-" Python
-Plug 'zchee/deoplete-jedi'
+let g:ale_fixers = {
+\   'elixir': ['mix_format'],
+\}
+
+let g:ale_sign_column_always = 1
 
 " vim-airline ステータスバーなどの見た目系
 Plug 'vim-airline/vim-airline'
@@ -281,9 +264,6 @@ Plug 'vim-airline/vim-airline-themes'
 
 " ctags
 Plug 'universal-ctags/ctags'
-
-" Haskell
-"Plug 'neovimhaskell/haskell-vim'
 
 " TOML Syntax
 Plug 'cespare/vim-toml'
@@ -297,63 +277,88 @@ Plug 'mattn/emmet-vim'
 call plug#end()
 
 
+" ****************************************
+"             vim-lsp の設定
+" ****************************************
+let g:lsp_async_completion = 1
+" AEL を使用するので、lint 機能は disable とする
+let g:lsp_diagnostics_enabled = 0
+" debug
+let g:lsp_log_verbose = 1
+let g:lsp_log_file = expand('~/vim-lsp.log')
+let g:asyncomplete_log_file = expand('~/asyncomplete.log')
+
+" lsp Python の設定
+if executable('pyls')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pyls',
+        \ 'cmd': {server_info->['pyls']},
+        \ 'whitelist': ['python'],
+        \ })
+endif
+
+" 関数定義・宣言への移動
+nnoremap <leader>d :LspDefinition<CR>
+nnoremap <leader><C-d> :LspDeclaration<CR>
+
+
+" ****************************************
+"             fzf の設定
+" ****************************************
+" 新規ウィンドウ
+let g:fzf_layout = { 'window': 'enew' }
+" 新規タブ
+let g:fzf_layout = { 'window': '-tabnew' }
+" Files 実行コマンド
+nnoremap <C-p> :Files<CR>
+
+
+" ****************************************
+"          vim-airline の設定
+" ****************************************
 " vim-airline のオプション
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 " vim-airline のテーマを設定
-let g:airline_theme='one'
+let g:airline_theme='iceberg'
 
-" Color Scheme の設定
-"colorscheme one
+" ****************************************
+"           Color Scheme の設定
+" ****************************************
 colorscheme iceberg
 set background=dark
 
 filetype plugin indent on
 
-" deoplete を使用する
-let g:deoplete#enable_at_startup=1
-"let g:deoplete#sources#rust#racer_binary = '$HOME/.cargo/bin/racer'
-"let g:deoplete#sources#rust#rust_source_path = '$HOME/rustlang_src/rust/src' 
-"let g:deoplete#sources#rust#show_duplicates = 1
-"let g:deoplete#sources#rust#disable_keymap=1
-
-" golang の設定
+" ****************************************
+"           golang の設定
+" ****************************************
 let g:go_fmt_autosave = 1
 let g:go_fmt_fail_silently = 1
 
-" --- rust-lang の設定 ---
-autocmd BufReadPost *.rs setlocal filetype=rust
-" バッファが編集中でも他のファイルを開けるようにする
-set hidden
-let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-    \ }
-" Automatically start language servers.
-let g:LanguageClient_autoStart = 1
-" Maps K to hover, gd to goto definition, F2 to rename
-nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent> <leader>gd :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
 
-" ctags
+" ****************************************
+"           ctags
+" ****************************************
 set tags=./tags,tags;
 
-" ファイル別の設定
-" sw=softtabstop, sts=shiftwidth, ts=tabstop, et=expandtabの略
+
+" ****************************************
+"           ファイル別の設定
+"           以下用語
+"               sw=softtabstop
+"               sts=shiftwidth
+"               ts=tabstop
+"               et=expandtab
+" ****************************************
 "if has("autocmd")
 augroup Init
     autocmd!
     autocmd FileType html setlocal sw=2 sts=2 ts=2 et
     autocmd FileType css setlocal sw=2 sts=2 ts=2 et
-    "autocmd BufRead,bufNewFile *.ex setfiletype elixir
     autocmd FileType elixir setlocal sw=2 sts=2 ts=2 et
     autocmd FileType haskell setlocal sw=2 sts=2 ts=2 et
-
-    "autocmd python nnoremap <silent><A-/> <S-i>#<ESC>:w<CR>
-    "autocmd rust nnoremap <silent><A-/> <S-i>//<ESC>:w<CR>
-    "autocmd go nnoremap <silent><A-/> <S-i>//<ESC>:w<CR>
-
 augroup END
 "endif
 
