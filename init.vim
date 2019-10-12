@@ -67,12 +67,9 @@ augroup highlightIdegraphicSpace
   autocmd VimEnter,Colorscheme * highlight IdeographicSpace term=underline ctermbg=DarkGreen guibg=#444b71
   autocmd VimEnter,WinEnter * match IdeographicSpace /　/
 augroup END
+
 " Font の設定
-"set guifont=SourceCodePro-Medium:h15
-"set guifont=RictyDiminished-Regular:h15
-"set guifont=Monoisome-Regular:h15
-"set guifont=FiraCode-Retina:h15
-set guifont=Hack-Regular:h16
+set guifont=hack:h18
 
 " 改行時などに、自動でインデントを設定してくれる
 set smartindent
@@ -87,7 +84,7 @@ set wildmenu
 set laststatus=2
 
 " クリップボードの共有
-set clipboard=unnamed
+set clipboard=unnamedplus
 
 " バックアップファイルを作成しない
 set nobackup
@@ -133,11 +130,6 @@ nnoremap <silent><ESC><ESC> :noh<CR>
 nnoremap <A-]> gt
 nnoremap <A-[> gT
 
-" 現在の行を上に動かす
-"nnoremap <S-Up>  :<c-u>execute 'move -1-'. v:count1<cr>
-" 現在の行を下に動かす
-"nnoremap <S-Down>  :<c-u>execute 'move +'. v:count1<cr>
-
 " ウィンドウのサイズを変更する
 nnoremap <S-Up> <C-w>+
 nnoremap <S-Down> <C-w>-
@@ -157,8 +149,10 @@ nnoremap <C-l> zl
 " 対応する括弧への移動 Control+Enter
 " <C-v><C-CR> で
 " 文字を表示
-"nnoremap  %
-"vnoremap  %
+"nnoremap 
+ %
+"vnoremap 
+ %
 
 " 検索コマンド
 nnoremap <leader><CR> *
@@ -182,19 +176,11 @@ nnoremap <silent><A-n> :cn<CR>
 " Quickfix リスト: 前に移動
 nnoremap <silent><A-N> :cN<CR>
 
-" augroup fileTypeSettings
-"     autocmd!
-"     autocmd BufRead, BufNewFile *.py nnoremap <silent><A-/> <S-i>#<ESC>:w<CR>
-"     autocmd BufRead, BufNewFile *.rs nnoremap <silent><A-/> <S-i>//<ESC>:w<CR>
-"     autocmd BufRead, BufNewFile *.go nnoremap <silent><A-/> <S-i>//<ESC>:w<CR>
-" augroup END
-
 nnoremap <A-l> :lvim /\<<C-r><C-w>\>/j % \|lw
 
 " 外部 grep の設定
 set grepprg=grep\ -rnIH\ --exclude-dir=.svn\ --exclude-dir=.git
 " grep 後にクイックフィックスリストが表示される
-"autocmd QuickfixCmdPost grep copen
 nnoremap <expr> <leader>g ':grep! ' . expand('<cword>') . ' *'
 nnoremap <leader>G :grep! <C-r>* *
 
@@ -208,11 +194,11 @@ nnoremap <C-y> viwy
 " paste
 nnoremap <C-p> viw"0p
 " Insert モード中にペースト
-inoremap <C-v> <C-r>*
+inoremap <C-v> <C-r>"
 " Ex モード中にペースト
-vnoremap <C-v> <C-r>*
+vnoremap <C-v> <C-r>"
 " Terminal モード中にペースト
-tnoremap <C-v> <C-r>*
+tnoremap <C-v> <C-r>"
 
 " ファイルの保存
 nnoremap <leader>w :w<CR>
@@ -242,11 +228,6 @@ set t_Co=256
 " TrueColor 対応
 set termguicolors
 
-
-"set runtimepath+=~/.config/nvim/dein.vim/repos/github.com/Shougo/dein.vim
-" 自作のプラグインを読み込ませる
-"set runtimepath+=~/.config/nvim/my-plugin/neofinder/neofinder.vim
-"runtime! userautoload/*.vim
 
 if &compatible
 	set nocompatible
@@ -417,9 +398,6 @@ Plug 'vim-airline/vim-airline-themes'
 " ctags
 Plug 'universal-ctags/ctags'
 
-" Haskell
-"Plug 'neovimhaskell/haskell-vim'
-
 " TOML Syntax
 Plug 'cespare/vim-toml'
 
@@ -475,6 +453,45 @@ set background=dark
 colorscheme gruvbox
 let g:gruvbox_contrast_dark = 'hard'
 
+" ****************************************
+"             vim-lsp の設定
+" ****************************************
+let g:lsp_async_completion = 1
+" AEL を使用するので、lint 機能は disable とする
+let g:lsp_diagnostics_enabled = 0
+" debug
+let g:lsp_log_verbose = 1
+let g:lsp_log_file = expand('~/vim-lsp.log')
+let g:asyncomplete_log_file = expand('~/asyncomplete.log')
+
+" lsp Python の設定
+if executable('pyls')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pyls',
+        \ 'cmd': {server_info->['pyls']},
+        \ 'whitelist': ['python'],
+        \ })
+endif
+
+" 関数定義・宣言への移動
+nnoremap <leader>d :LspDefinition<CR>
+nnoremap <leader><C-d> :LspDeclaration<CR>
+
+
+" ****************************************
+"             fzf の設定
+" ****************************************
+" 新規ウィンドウ
+let g:fzf_layout = { 'window': 'enew' }
+" 新規タブ
+let g:fzf_layout = { 'window': '-tabnew' }
+" Files 実行コマンド
+nnoremap <C-p> :Files<CR>
+
+
+" ****************************************
+"          vim-airline の設定
+" ****************************************
 " vim-airline のオプション
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
@@ -488,21 +505,22 @@ filetype plugin indent on
 set tags=./tags,tags;
 nnoremap <silent><C-]> g<C-]>
 
-" ファイル別の設定
-" sw=softtabstop, sts=shiftwidth, ts=tabstop, et=expandtabの略
+
+" ****************************************
+"           ファイル別の設定
+"           以下用語
+"               sw=softtabstop
+"               sts=shiftwidth
+"               ts=tabstop
+"               et=expandtab
+" ****************************************
 "if has("autocmd")
 augroup Init
     autocmd!
     autocmd FileType html setlocal sw=2 sts=2 ts=2 et
     autocmd FileType css setlocal sw=2 sts=2 ts=2 et
-    "autocmd BufRead,bufNewFile *.ex setfiletype elixir
     autocmd FileType elixir setlocal sw=2 sts=2 ts=2 et
     autocmd FileType haskell setlocal sw=2 sts=2 ts=2 et
-
-    "autocmd python nnoremap <silent><A-/> <S-i>#<ESC>:w<CR>
-    "autocmd rust nnoremap <silent><A-/> <S-i>//<ESC>:w<CR>
-    "autocmd go nnoremap <silent><A-/> <S-i>//<ESC>:w<CR>
-
 augroup END
 "endif
 
