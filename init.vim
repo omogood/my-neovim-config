@@ -15,6 +15,10 @@ let g:netrw_liststyle=3
 let g:netrw_preview=1
 let g:netrw_winsize=25
 let g:netrw_chgwin=2
+let g:netrw_wiw=25
+
+" 画面分割した際に下に画面を出す
+set splitbelow
 
 " カレント行をハイライト
 set cursorline
@@ -92,14 +96,21 @@ set nobackup
 " terminal emulator を zsh に設定
 set sh=zsh
 
+" terminal emulator でノーマルモードに移行するキーマップ
+tnoremap <silent> <ESC> <C-\><C-n>
+tnoremap <silent> <C-j><C-j> <C-\><C-n>
+
+" terminal 起動コマンド
+function! TerminalOpen()
+    sv|terminal
+    resize 15
+endfunction
+command! TerminalOpen :call TerminalOpen()
+
 " ビープ音とビジュアルベルを無効にする
 set noerrorbells
 set novisualbell
 set vb t_vb=
-
-" terminal emulator でノーマルモードに移行するキーマップ
-tnoremap <silent> <ESC> <C-\><C-n>
-tnoremap <silent> <C-j><C-j> <C-\><C-n>
 
 " keymap の再設定
 let mapleader = "\<Space>"
@@ -529,5 +540,4 @@ augroup END
 nnoremap <silent><leader>; :Files<CR>
 nnoremap <silent><leader>b :Buffers<CR>
 nnoremap <silent><leader>t :Tags<CR>
-
 
