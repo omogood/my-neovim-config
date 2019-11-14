@@ -168,10 +168,6 @@ nnoremap <C-l> zl
 " 検索コマンド
 nnoremap <leader><CR> *
 
-" delete コマンドのRe-map
-inoremap <C-d> <del>
-
-
 " quickfix: 編集許可と折り返し表示無効
 function! OpenModifiableQF()
         copen
@@ -212,7 +208,7 @@ vnoremap <C-v> <C-r>"
 tnoremap <C-v> <C-r>"
 
 " ファイルの保存
-nnoremap <leader>w :w<CR>
+nnoremap <leader>s :w<CR>
 
 " 新しいタブを開く
 nnoremap <C-n> :tabnew<CR>
@@ -417,6 +413,7 @@ Plug 'cocopon/iceberg.vim'
 Plug 'altercation/vim-colors-solarized'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'morhetz/gruvbox'
+Plug 'arcticicestudio/nord-vim'
 
 " Emmet
 Plug 'mattn/emmet-vim'
@@ -461,8 +458,8 @@ nnoremap [r :ALEPreviousWrap<CR>
 
 " Color Scheme の設定
 set background=dark
-colorscheme gruvbox
-let g:gruvbox_contrast_dark = 'hard'
+colorscheme nord
+"let g:gruvbox_contrast_dark = 'hard'
 
 " ****************************************
 "             vim-lsp の設定
@@ -508,7 +505,7 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 " vim-airline のテーマを設定
-let g:airline_theme='gruvbox'
+let g:airline_theme='nord'
 
 filetype plugin indent on
 
@@ -540,4 +537,8 @@ augroup END
 nnoremap <silent><leader>; :Files<CR>
 nnoremap <silent><leader>b :Buffers<CR>
 nnoremap <silent><leader>t :Tags<CR>
+
+" ------------------------------------------------------------------------------
+" Lexplore
+nnoremap <silent><leader>l :Lexplore<CR>
 
